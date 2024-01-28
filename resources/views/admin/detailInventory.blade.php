@@ -199,6 +199,8 @@ $('.btnModalQTY').click(function (e) {
   e = $(this).data('id')
   $('#colorEdit').attr('readonly', true)
   $('#qtyEdit').attr('readonly', false)
+  $('#updateDataQty').show()
+  $('#updateDataColor').hide() 
   console.log('edit kuantiti')
   $('#modalEdit').modal('show')
   $.ajax({
@@ -206,6 +208,8 @@ $('.btnModalQTY').click(function (e) {
     url: '/inventory/edit/'+e,
     success:function (response) {
       // console.log(response);
+      $('[name="idEdit"]').val(response[0].id);
+      $('[name="idInventoryEdit"]').val(response[0].inventory_id);
       $('#colorEdit').val(response[0].color);
       $('#qtyEdit').val(response[0].qty);
     }
@@ -215,6 +219,8 @@ $('.btnModalColor').click(function (e) {
   e = $(this).data('id')
   $('#qtyEdit').attr('readonly', true)
   $('#colorEdit').attr('readonly', false)
+  $('#updateDataQty').hide()
+  $('#updateDataColor').show()
   console.log('edit warna')
   $('#modalEdit').modal('show')
   $.ajax({
@@ -222,6 +228,8 @@ $('.btnModalColor').click(function (e) {
     url: '/inventory/edit/'+e,
     success:function (response) {
       // console.log(response);
+      $('[name="idEdit"]').val(response[0].id);
+      $('[name="idInventoryEdit"]').val(response[0].inventory_id);
       $('#colorEdit').val(response[0].color);
       $('#qtyEdit').val(response[0].qty);
     }
@@ -245,6 +253,8 @@ $('.btnModalColor').click(function (e) {
           <div class="col-auto mb-3">
             <span for="colorEdit">Warna</span>
             @csrf
+            <input type="hidden" name="idEdit">
+            <input type="hidden" name="idInventoryEdit">
             <input type="text" id="colorEdit" class="form-control">
           </div>
           <div class="col-auto mb-3">
@@ -254,7 +264,8 @@ $('.btnModalColor').click(function (e) {
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary updateData" id="updateData">Update</button>
+        <button type="button" class="btn btn-primary updateData" id="updateDataColor">Update Warna</button>
+        <button type="button" class="btn btn-primary updateData" id="updateDataQty">Update</button>
       </div>         
     </div>       
   </div>    
@@ -263,8 +274,49 @@ $('.btnModalColor').click(function (e) {
 @endsection
 @push('scriptModal')
 <script>
-  $('.updateData').click(function () {
-    console.log('hahay');
+  $('#updateDataColor').click(function () {
+    formData = {
+      _token: $('[name="_token"]').val(),
+      id: $('[name="idEdit"]').val(),
+      inventoryid: $('[name="idInventoryEdit"]').val(),
+      color: $('#colorEdit').val()
+    };
+    // color = $('#colorEdit').val()
+    // qty = $('#qtyEdit').val()
+    // console.log(formData);
+    $.ajax({
+      type:'POST',
+      url: '/inventory/edit',
+      data: formData,
+      success: function (response) {
+        console.log(response);
+      }, 
+      error : function (err) {
+        console.log(err);
+      }
+    })
+  })
+  $('#updateDataQty').click(function () {
+    // color = $('#colorEdit').val()
+    formData = {
+      _token: $('[name="_token"]').val(),
+      id: $('[name="idEdit"]').val(),
+      inventoryid: $('[name="idInventoryEdit"]').val(response[0].id);
+      qty: $('#qtyEdit').val()
+    }
+    // qty = $('#qtyEdit').val()
+    // console.log(formData);
+    $.ajax({
+      type:'POST',
+      url: '/inventory/edit',
+      data: formData,
+      success: function (response) {
+        console.log(response);
+      }, 
+      error : function (err) {
+        console.log(err);
+      }
+    })
   })
 </script>
 @endpush

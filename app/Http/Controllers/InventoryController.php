@@ -144,7 +144,19 @@ class InventoryController extends Controller
 
     public function update(Request $req)
     {
-        return $req->all();
+        // $data = Inventory::find($req->id)->first();
+        if ($req->color) {
+            // $data = Inventory::where('employe_id', $)
+            // Inventory::where('employe_id',$data-)->update([
+            //     'color'=>$req->color
+            // ]);
+            return true;
+        } else if ($req->qty) {
+            Inventory::where('id', $req->id)->update([
+                'qty'=>$req->qty
+            ]);
+            return true;
+        }
         // $this->_validate($req);
         // $req->validate([
         //     'color'=>'required',
